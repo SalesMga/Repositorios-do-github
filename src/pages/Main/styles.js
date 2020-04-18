@@ -36,10 +36,10 @@ font-size: 16px;
 
 const rotate = keyframes`
  from {
-   transform: rotate(0deg);
+   transform-origin: rotate(0deg);
  }
  to{
-  transform: rotate(360deg);
+  transform-origin: rotate(360deg);
  }
  `;
 
