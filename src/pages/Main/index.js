@@ -5,7 +5,9 @@ import {Link} from 'react-router-dom';
 
 import api from '../../services/api';
 
-import { Container, Form, SubmitButton, List } from './styles.js';
+import Container from '../../components/Container/index';
+
+import { Form, SubmitButton, List } from './styles.js';
 
 export default class Main extends Component {
   state = {
@@ -57,7 +59,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { newRepo, repositories, loading } = this.state;
+    const {repositories, newRepo, loading } = this.state;
 
     return (
       <Container>
@@ -81,12 +83,14 @@ export default class Main extends Component {
         </Form>
 
         <List>
-          {repositories.map(repository => (
+          {
+          repositories.map(repository => (
             <li key={repository.name}>
               <span>{repository.name}</span>
               <Link to={`/repository/${encodeURIComponent(repository.name)}`}>Detalhes</Link>
             </li>
-          ))}
+          ))
+          }
         </List>
 
       </Container>
