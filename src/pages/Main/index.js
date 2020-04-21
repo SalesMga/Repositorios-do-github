@@ -84,10 +84,10 @@ export default class Main extends Component {
 
         <List>
           {
-          repositories.map(repository => (
-            <li key={repository.name}>
-              <span>{repository.name}</span>
-              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>Detalhes</Link>
+          repositories.map( repos => (
+            <li key={repos.name}>
+              <span>{repos.name}</span>
+              <Link to={`/repository/${encodeURIComponent(repos.name)}`}>Detalhes</Link>
             </li>
           ))
           }
