@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 
@@ -16,22 +16,22 @@ export default class Main extends Component {
     loading: false,
   };
 
-    //carrega os dados do localStorage //shift+alt+a comentar varias linhas
-    componentDidMount() {
-      const repositories = localStorage.getItem('repositories');
+  //carrega os dados do localStorage //shift+alt+a comentar varias linhas
+  componentDidMount() {
+    const repositories = localStorage.getItem('repositories');
 
-      if(repositories){
-        this.setState( {repositories: JSON.stringify(repositories)});
-      }
+    if (repositories) {
+      this.setState({ repositories: JSON.stringify(repositories) });
     }
+  }
   // Salva os dados do localStorage
-    componentDidUpdate( _, prevState) {
-      const { repositories } = this.state;
+  componentDidUpdate(_, prevState) {
+    const { repositories } = this.state;
 
-      if (prevState.repositories !== repositories) {
-        localStorage.setItem('repositories', JSON.stringify(repositories));
-      }
+    if (prevState.repositories != repositories) {
+      localStorage.setItem('repositories', JSON.stringify(repositories));
     }
+  }
 
   handleInputChange = e => {
     this.setState({ newRepo: e.target.value });
@@ -59,7 +59,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const {repositories, newRepo, loading } = this.state;
+    const { repositories, newRepo, loading } = this.state;
 
     return (
       <Container>
@@ -83,14 +83,12 @@ export default class Main extends Component {
         </Form>
 
         <List>
-          {
-          repositories.map( repos => (
-            <li key={repos.name}>
-              <span>{repos.name}</span>
-              <Link to={`/repository/${encodeURIComponent(repos.name)}`}>Detalhes</Link>
-            </li>
-          ))
-          }
+          {repositories.map(repository => (
+              <li key={repository.name}>
+                <span>{repository.name}</span>
+                <Link to={`/repository/${encodeURIComponent(repository.name)}`}>Detalhes</Link>
+              </li>
+            ))}
         </List>
 
       </Container>
