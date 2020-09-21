@@ -23,17 +23,17 @@ export default class Repository extends Component {
     loading: true,
   };
 
-  async componentDidMount() {
+  async componentDidMount() { //monsta as informações
     const { match } = this.props;
 
     const repoName = decodeURIComponent(match.params.repository);
 
-    const [repository, issues] = await Promise.all([
+    const [repository, issues] = await Promise.all([ //so ira terminar apos as 2 requisicao na api do git terminar
       api.get(`/repos/${repoName}`),
       api.get(`/repos/${repoName}/issues`, {
         params: {
-          state: 'open',
-          per_page: 5,
+          state: 'open', //traz apenas issues que estao em aberto
+          per_page: 7, //traz 7 resultador por paginação
         },
       }),
     ]);

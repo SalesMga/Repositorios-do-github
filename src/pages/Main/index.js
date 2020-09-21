@@ -46,18 +46,41 @@ export default class Main extends Component {
 
     const { newRepo, repositories } = this.state;
 
-    const response = await api.get(`/repos/${newRepo}`);
+    if (newRepo.length <= 0 || newRepo.length == "") {
+      alert("Digite um repositório!");
+      this.setState({
+        newRepo: '',
+        loading: false,
+      });
+    } else {
 
-    const data = {
-      name: response.data.full_name,
-    };
+      const response = await api.get(`/repos/${newRepo}`)
+        .catch(function (error) {
+          if (error.response.status !== 200) {
+            alert("Este repositorio não existe");
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+            this.setState({
+              newRepo: '',
+              loading: false,
+            });
 
+          }else{
+            const data = {
+              name: response.data.full_name,
+            };
+
+            this.setState({
+              repositories: [...repositories, data],
+              newRepo: '',
+              loading: false,
+            });
+          }
+        });
+
+
+
+
+    }
   };
 
   render() {
@@ -80,7 +103,7 @@ export default class Main extends Component {
 
           <SubmitButton loading={loading ? 1 : 0}>
             {
-            loading ? (<FaSpinner color="#FFF" size={14} />) : (<FaPlus color="#FFF" size={14} />)
+              loading ? (<FaSpinner color="#FFF" size={14} />) : (<FaPlus color="#FFF" size={14} />)
             }
           </SubmitButton>
         </Form>
@@ -96,7 +119,7 @@ export default class Main extends Component {
                   <Link to={`/repository/${encodeURIComponent(repository.name)}`}>Detalhes</Link>
                 </li>
               ))
-             : <Link to={"/"}></Link>
+              : <Link to={"/"}></Link>
           }
         </List>
 
