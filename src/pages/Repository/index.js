@@ -23,7 +23,7 @@ export default class Repository extends Component {
     loading: true,
   };
 
-  async componentDidMount() { //monsta as informações
+  async componentDidMount() { //monta as informações
     const { match } = this.props;
 
     const repoName = decodeURIComponent(match.params.repository);

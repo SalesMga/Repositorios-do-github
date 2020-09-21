@@ -42,44 +42,41 @@ export default class Main extends Component {
   handleSubmit = async e => {
     e.preventDefault();
 
-    this.setState({ loading: true });
-
     const { newRepo, repositories } = this.state;
 
     if (newRepo.length <= 0 || newRepo.length == "") {
       alert("Digite um repositório!");
+      return;
+    };
+    try {
+
+      this.setState({ loading: true });
+
+      const response = await api.get(`/repos/${newRepo}`);
+
+      const data = {
+        name: response.data.full_name,
+      };
+
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+      });
+
+    } catch (error) {
+      console.log(error.response);
+
+      if (error.response.status === 404) {
+        alert("Repositorio não encontrado!");
+      } else {
+        alert("Ocorreu algum erro ao tentar obter dados deste repositorio, verifique e tente novamente!");
+      }
+
       this.setState({
         newRepo: '',
         loading: false,
       });
-    } else {
-
-      const response = await api.get(`/repos/${newRepo}`)
-        .catch(function (error) {
-          if (error.response.status !== 200) {
-            alert("Este repositorio não existe");
-
-            this.setState({
-              newRepo: '',
-              loading: false,
-            });
-
-          }else{
-            const data = {
-              name: response.data.full_name,
-            };
-
-            this.setState({
-              repositories: [...repositories, data],
-              newRepo: '',
-              loading: false,
-            });
-          }
-        });
-
-
-
-
     }
   };
 
