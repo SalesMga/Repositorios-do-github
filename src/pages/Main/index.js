@@ -14,7 +14,7 @@ export default class Main extends Component {
   state = {
     newRepo: '',
     repositories: [],
-    loading: false,
+    loading: null,
   };
 
   //carrega os dados do localStorage
@@ -36,19 +36,22 @@ export default class Main extends Component {
   }
 
   handleInputChange = e => {
-    this.setState({ newRepo: e.target.value });
+    this.setState({ newRepo: e.target.value, error: null });
   };
 
   handleSubmit = async e => {
     e.preventDefault();
 
-    const { newRepo, repositories } = this.state;
+    this.setState({ loading: true, error: false });
 
-    if (newRepo.length <= 0 || newRepo.length == "") {
-      alert("Digite um repositório!");
-      return;
-    };
     try {
+     const {newRepo, repositories } = this.state;
+
+     if (newRepo === "") throw 'campo vazio!';
+
+     const hasRepo = repositories.find(e => e.name === newRepo);
+
+     if(hasRepo) throw 'Repositorio já exsite!';
 
       this.setState({ loading: true });
 
@@ -61,22 +64,12 @@ export default class Main extends Component {
       this.setState({
         repositories: [...repositories, data],
         newRepo: '',
-        loading: false,
       });
 
     } catch (error) {
-      console.log(error.response);
-
-      if (error.response.status === 404) {
-        alert("Repositorio não encontrado!");
-      } else {
-        alert("Ocorreu algum erro ao tentar obter dados deste repositorio, verifique e tente novamente!");
-      }
-
-      this.setState({
-        newRepo: '',
-        loading: false,
-      });
+      this.setState({ error: true });
+    } finally {
+      this.setState({ loading: false}) ;
     }
   };
 
@@ -93,7 +86,7 @@ export default class Main extends Component {
         <Form onSubmit={this.handleSubmit}>
           <input
             type="text"
-            placeholder="Digite um repositório e clica no +"
+            placeholder="Digite o nome do repositório"
             value={newRepo}
             onChange={this.handleInputChange}
           />
